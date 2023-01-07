@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { prependListener } = require("process");
 
 function requiredParameter(parameterName) {
   throw new Error(`El Parametro ${parameterName} no fue ingresado`);
@@ -7,7 +6,7 @@ function requiredParameter(parameterName) {
 
 class ProductManager {
   constructor(path) {
-    this.fileName = "productsData.json";
+    this.fileName = "productos.json";
     this.path = path;
     this.products = [];
     this.idProductoCreado = this.findHighestId();
@@ -60,9 +59,11 @@ class ProductManager {
     title = requiredParameter("title"),
     description = requiredParameter("description"),
     price = requiredParameter("price"),
-    thumbnail = requiredParameter("thumbnail"),
     code = requiredParameter("code"),
-    stock = requiredParameter("stock")
+    stock = requiredParameter("stock"),
+    status = requiredParameter("status"),
+    category = requiredParameter("category"),
+    thumbnail = "Valor por defecto"
   ) {
     //Retornar todos los productos
     const products = this.getProducts();
@@ -83,6 +84,8 @@ class ProductManager {
       thumbnail,
       code,
       stock,
+      status,
+      category,
     };
 
     //Se agrega el producto al json
@@ -98,7 +101,7 @@ class ProductManager {
     const foundProduct = products.find((product) => product.id == id);
 
     if (typeof foundProduct == "undefined") {
-      return undefined;
+      throw new Error("El product id no fue encontrado");
     } else {
       return foundProduct;
     }
@@ -110,8 +113,7 @@ class ProductManager {
 
     //Si no se encuentra el id, no se actulizará el producto
     if (foundProductIndex == -1) {
-      console.log("Id to update not found");
-      return;
+      throw new Error("El id no fue encontrado");
     }
 
     //Si se encuentra el Id, se procederá a actualizarlo
@@ -129,8 +131,7 @@ class ProductManager {
 
     //Si no se encuentra el id, no se actulizará el producto
     if (foundProductIndex == -1) {
-      console.log("Id to delete not found");
-      return;
+      throw new Error("El id no fue encontrado");
     }
 
     //Si se encuentra el Id, se procederá a borrarlo
@@ -140,6 +141,6 @@ class ProductManager {
   }
 }
 
-const productManager = new ProductManager("./src/");
+const productManager = new ProductManager("./database/");
 
 module.exports = { productManager };
