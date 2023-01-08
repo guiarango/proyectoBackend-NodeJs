@@ -65,7 +65,7 @@ class CartManager {
 
     //Se agrega el producto al json
     carts.push(cart);
-    this.writeProducts(carts);
+    this.writeCarts(carts);
 
     //Se incrementa el id en 1
     this.incrementId();

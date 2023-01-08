@@ -71,8 +71,7 @@ class ProductManager {
     //Validar que el code no se repita
     const codigoRepetido = products.some((product) => product.code == code);
     if (codigoRepetido) {
-      console.log("Code already exists");
-      return;
+      throw new Error("El code del producto ya existe");
     }
 
     //Se crea el objeto productos

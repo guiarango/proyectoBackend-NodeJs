@@ -42,5 +42,16 @@
     "status": false,
     "category": "Niña",
     "thumbnail": "localhost:3000/imagenes/4"
+  },
+  {
+    "id": 4,
+    "title": "Producto5",
+    "description": "Descripcion producto 5",
+    "price": 1000,
+    "thumbnail": "localhost:3000/imagenes/5",
+    "code": 1234,
+    "stock": 1,
+    "status": true,
+    "category": "Hombre"
   }
 ]

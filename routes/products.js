@@ -36,7 +36,11 @@ router.post("", (req, res) => {
     jsonProductos.map((producto) => {
       //Se extraen los valores de cada objeto y luego se distribuyen dentro del metodo addproduct
       let valores = Object.values(producto);
-      productManager.addProduct(...valores);
+      try {
+        productManager.addProduct(...valores);
+      } catch (error) {
+        return res.status(404).send(error.message);
+      }
     });
 
     return res.status(200).send("Producto creado");
