@@ -1,0 +1,46 @@
+<h1>Formulario</h1>
+
+<form method="post">
+  <p><label for="title">Nombre del producto</label>
+    <input type="text" name="title" id="productTitle" /></p>
+  <p><label for="description">Descripción del producto</label>
+    <input type="text" name="description" id="productDescription" /></p>
+  <p><label for="price">Precio del producto</label>
+    <input type="number" name="price" id="productPrice" /></p>
+  <p><label for="code">Código del producto</label>
+    <input type="number" name="code" id="productCode" /></p>
+  <p><label for="stock">Stock del producto</label>
+    <input type="number" name="stock" id="productStock" /></p>
+  <p><label for="status">Status del producto</label>
+    <select name="status" id="productStatus">
+      <option value="true">true</option>
+      <option value="false">false</option>
+    </select>
+  </p>
+  <p><label for="category">Categoría del producto</label>
+    <select name="category" id="productCategory">
+      <option value="Hombre">Hombre</option>
+      <option value="Mujer">Mujer</option>
+      <option value="Niño">Niño</option>
+      <option value="Niña">Niña</option>
+    </select>
+
+  </p>
+  <p><label for="thumbnail">Thumbnail del producto</label>
+    <input type="text" name="thumbnail" id="productThumbnail" /></p>
+
+  <button type="submit" id="submitForm">Crear nuevo producto</button>
+
+</form>
+
+<h1>Productos con socket</h1>
+
+<ul>
+  {{#each products}}
+    <li>{{this.title}}</li>
+  {{/each}}
+
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
