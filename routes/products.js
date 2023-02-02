@@ -10,14 +10,14 @@ const { middlewareProducts } = require("../middlewares/customMiddleware");
 router.use(middlewareProducts);
 
 //Importar modulo de productos
-const { productManager } = require("../classes/productManager");
+const { productManager } = require("../dao/classes/productManager");
 
-router.get("", function (req, res) {
+router.get("", async function (req, res) {
   //Se guarda el query string de limit
   const limit = Number(req.query.limit);
 
   //Se consultan los productos
-  const products = productManager.getProducts();
+  const products = await productManager.getProducts();
   let respuesta;
 
   //Se valida que exista la variable limit y que sea un número
@@ -29,57 +29,81 @@ router.get("", function (req, res) {
   return res.status(200).send(respuesta);
 });
 
-router.post("", (req, res) => {
-  const jsonProductos = Array(req.body);
+router.post("", async (req, res) => {
+  const {
+    title,
+    description,
+    price,
+    code,
+    stock,
+    status,
+    category,
+    thumbnail,
+  } = req.body;
 
-  if (jsonProductos.length) {
-    jsonProductos.map((producto) => {
-      //Se extraen los valores de cada objeto y luego se distribuyen dentro del metodo addproduct
-      let valores = Object.values(producto);
-      try {
-        productManager.addProduct(...valores);
-      } catch (error) {
-        return res.status(404).send(error.message);
-      }
-    });
-
-    return res.status(200).send("Producto creado");
+  //Validar que los objetos no vengan vacios
+  if (
+    title &&
+    description &&
+    price &&
+    code &&
+    stock &&
+    status !== null &&
+    category
+  ) {
+    try {
+      const result = await productManager.addProduct(
+        title,
+        description,
+        price,
+        code,
+        stock,
+        status,
+        category,
+        thumbnail
+      );
+      return res.status(200).send({ result: "sucess", payload: result });
+    } catch (error) {
+      return res.status(500).send(error.message);
+    }
+  } else {
+    return res.status(404).send("Información de producto vacía");
   }
-  return res.status(404).send("Información de producto vacía");
 });
 
-router.get("/:pid", function (req, res) {
+router.get("/:pid", async function (req, res) {
   //Se guarda el param de pid
-  const pid = Number(req.params.pid);
+  const pid = req.params.pid;
 
   //Se valida que el resultado de product exista
   try {
-    const product = productManager.getProductById(pid);
+    const product = await productManager.getProductById(pid);
     return res.status(200).send(product);
   } catch (error) {
     return res.status(404).send(error.message);
   }
 });
 
-router.put("/:pid", function (req, res) {
+router.put("/:pid", async function (req, res) {
   //Se guarda el param de pid
-  const pid = Number(req.params.pid);
+  const pid = req.params.pid;
+  const data = req.body;
 
   try {
-    productManager.updateProduct(pid, req.body);
-    return res.status(200).send("Producto actualizado");
+    const result = await productManager.updateProduct(pid, data);
+    return res.status(200).send({ result: "sucess", payload: result });
   } catch (error) {
-    return res.status(404).send(error.message);
+    return res.status(500).send(error.message);
   }
 });
 
-router.delete("/:pid", function (req, res) {
+router.delete("/:pid", async function (req, res) {
   //Se guarda el param de pid
-  const pid = Number(req.params.pid);
+  const pid = req.params.pid;
 
   try {
-    productManager.deleteProduct(pid, req.body);
-    return res.status(200).send("Producto borrado");
+    const product = await productManager.deleteProduct(pid);
+    return res.status(200).send(product);
   } catch (error) {
     return res.status(404).send(error.message);
   }

@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 //Importar productManager
-const { productManager } = require("../classes/productManager");
+const { productManager } = require("../dao/classes/productManager");
 
 //ENDPOINTS
 router.get("/", function (req, res) {

@@ -10,7 +10,7 @@ const { middlewareCarts } = require("../middlewares/customMiddleware");
 router.use(middlewareCarts);
 
 //Importar modulo de carts
-const { cartManager } = require("../classes/cartManager");
+const { cartManager } = require("../dao/classes/cartManager");
 
 router.post("", (req, res) => {
   const jsonProductos = Array(req.body);

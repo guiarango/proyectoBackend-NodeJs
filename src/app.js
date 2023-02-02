@@ -1,8 +1,15 @@
 //Importar librería
 const express = require("express");
 
-//Importar path
+//Import
 const path = require("path");
+const mongoose = require("mongoose");
+
+//Variables de entorno
+require("dotenv").config({ path: "./.env" });
+const userMongo = process.env.USER_MONGO;
+const passwordMongo = process.env.PASSWORD_MONGO;
+const dbMongo = process.env.DB_MONGO;
 
 //Instanciar servidor
 const app = express();
@@ -11,7 +18,7 @@ const app = express();
 const handlebars = require("express-handlebars");
 
 //Importar productManager
-const { productManager } = require("../classes/productManager");
+const { productManager } = require("../dao/classes/productManager");
 
 //Importar socket server
 const { Server } = require("socket.io");
@@ -49,12 +56,6 @@ app.use(errorHandler);
 app.use(express.static(staticFilesPath));
 
 //--------------------MIDDLEWARES DE TERCEROS--------------------
-
-//--------------------ENDPOINTS--------------------
-app.use("/", homeRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/carts", cartRoutes);
-app.use("/api/realTimeProducts", realTimeProducts);
 
 //--------------------LEVANTAR SERVIDOR--------------------
 const httpServer = app.listen(port, function () {
@@ -94,3 +95,20 @@ socketServer.on("connection", (socket) => {
     console.log("Información de producto vacía");
   });
 });
+
+mongoose.connect(
+  `mongodb+srv://${userMongo}:${passwordMongo}@ecommerce.ff5ghqj.mongodb.net/${dbMongo}?retryWrites=true&w=majority`,
+  (error) => {
+    if (error) {
+      console.log("Cannot connect to database: ", error);
+      process.exit();
+    } else {
+      console.log("Connected to the database");
+    }
+  }
+);
+//--------------------ENDPOINTS--------------------
+app.use("/", homeRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/carts", cartRoutes);
+app.use("/api/realTimeProducts", realTimeProducts);
