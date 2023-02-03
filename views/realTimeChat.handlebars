@@ -1,0 +1,25 @@
+<h1>Formulario</h1>
+
+<form method="post">
+  <p><label for="userName">Nombre del usuario</label>
+    <input type="text" name="userName" id="userName" /></p>
+  <p><label for="userMessage">mensaje</label>
+    <input type="text" name="userMessage" id="userMessage" /></p>
+
+  <button type="submit" id="submitForm">Enviar mensaje</button>
+
+</form>
+
+<h1>chat:</h1>
+
+<ul>
+  {{#each messages}}
+
+    <li>{{this}}</li>
+
+  {{/each}}
+
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeChat.js"></script>

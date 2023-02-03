@@ -28,9 +28,9 @@ const homeRoutes = require("../routes/home");
 const productRoutes = require("../routes/products");
 const cartRoutes = require("../routes/carts");
 const realTimeProducts = require("../routes/realTimeProducts");
+const realTimeChat = require("../routes/realTimeChat");
 
 //configurar motor de plantillas
-
 const templateDir = path.resolve(__dirname, "../views");
 app.engine("handlebars", handlebars.engine());
 app.set("view engine", "handlebars");
@@ -41,6 +41,9 @@ const {
   middlewareApp,
   errorHandler,
 } = require("../middlewares/customMiddleware");
+
+//Importar controllers
+const chatController = require("../controllers/chatController");
 
 //Puerto en el cuál trabajar
 const port = 8080;
@@ -94,6 +97,14 @@ socketServer.on("connection", (socket) => {
     }
     console.log("Información de producto vacía");
   });
+
+  socket.on("crearMensaje", (data) => {
+    try {
+      chatController.saveMessage(data, socketServer, "mensajeCreado");
+    } catch (error) {
+      return error.message;
+    }
+  });
 });
 
 mongoose.connect(
@@ -112,3 +123,4 @@ app.use("/", homeRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/realTimeProducts", realTimeProducts);
+app.use("/api/realTimeChat", realTimeChat);

@@ -7,9 +7,15 @@ function requiredParameter(parameterName) {
 class ProductManager {
   constructor() {}
 
-  async getProducts() {
+  async getProducts(limit) {
     try {
-      const data = await productsModel.find({});
+      let data;
+      if (limit && !isNaN(limit)) {
+        data = await productsModel.find({}).limit(limit);
+      } else {
+        data = await productsModel.find({});
+      }
+
       return data;
     } catch (error) {
       throw new Error("No se pudo conectar al servidor");

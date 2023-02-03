@@ -1,5 +1,3 @@
-const fs = require("fs");
-
 const { cartModel } = require("../models/ecommerceModels");
 const { productManager } = require("./productManager");
 

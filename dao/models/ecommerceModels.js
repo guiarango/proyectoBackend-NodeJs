@@ -10,7 +10,7 @@ const cartSchema = new mongoose.Schema({
 
 const messageSchema = new mongoose.Schema({
   user: String,
-  email: { type: String, unique: true },
+  message: String,
 });
 
 const productSchema = new mongoose.Schema({
