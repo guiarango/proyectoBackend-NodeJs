@@ -26,14 +26,6 @@ class ProductManager {
     category = requiredParameter("category"),
     thumbnail = "Valor por defecto"
   ) {
-    //Retornar todos los productos
-    const codigoRepetido = await productsModel.findOne({ code: code });
-
-    //Validar que el code no se repita
-    if (codigoRepetido !== null) {
-      throw new Error("El code del producto ya existe");
-    }
-
     //Se crea el objeto productos
     const product = {
       title,
@@ -46,7 +38,7 @@ class ProductManager {
       thumbnail,
     };
 
-    //Se agrega el producto al json
+    //Se agrega el producto a la DB
     try {
       const newProduct = await productsModel.create(product);
       return newProduct;
@@ -57,7 +49,7 @@ class ProductManager {
 
   async getProductById(pid) {
     try {
-      const productFound = await productsModel.findOne({ id: pid });
+      const productFound = await productsModel.findOne({ _id: pid });
       return productFound;
     } catch (error) {
       throw new Error(error);
