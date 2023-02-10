@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const cartCollection = "carts";
 const messageCollection = "messages";
@@ -23,6 +24,8 @@ const productSchema = new mongoose.Schema({
   category: String,
   thumbnail: String,
 });
+
+productSchema.plugin(mongoosePaginate);
 
 const cartModel = mongoose.model(cartCollection, cartSchema);
 const messagesModel = mongoose.model(messageCollection, messageSchema);

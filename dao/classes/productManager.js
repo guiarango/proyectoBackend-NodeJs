@@ -4,17 +4,117 @@ function requiredParameter(parameterName) {
   throw new Error(`El Parametro ${parameterName} no fue ingresado`);
 }
 
+// function validateSort(sort) {
+//   if (sort === "asc") {
+//     return { $sort: { price: 1 } };
+//   }
+
+//   if (sort === "desc") {
+//     return { $sort: { price: -1 } };
+//   }
+
+//   return null;
+// }
+
+// function validateQuery(query) {
+//   if (query === null) {
+//     return {};
+//   }
+
+//   if (query === "false") {
+//     return {
+//       $match: {
+//         stock: 0,
+//       },
+//     };
+//   }
+
+//   if (query === "true") {
+//     return {
+//       $match: {
+//         stock: { $gte: 1, $to },
+//       },
+//     };
+//   }
+
+//   return {
+//     $match: {
+//       category: query,
+//     },
+//   };
+// }
+
+function validateSort(sort) {
+  if (sort === "asc") {
+    return { sort: { date: 1 } };
+  }
+  if (sort === "desc") {
+    return { sort: { date: -1 } };
+  }
+  return null;
+}
+
+function validateQuery(query) {
+  if (query === null) {
+    return {};
+  }
+
+  if (query === "false") {
+    return {
+      stock: 0,
+    };
+  }
+
+  if (query === "true") {
+    return {
+      stock: { $gte: 1 },
+    };
+  }
+
+  return {
+    category: query,
+  };
+}
+
 class ProductManager {
   constructor() {}
 
-  async getProducts(limit) {
+  async getProducts(query, sort, limit, page) {
     try {
       let data;
-      if (limit && !isNaN(limit)) {
-        data = await productsModel.find({}).limit(limit);
+      const sortObject = validateSort(sort);
+      const queryParam = validateQuery(query);
+
+      if (sortObject == null) {
+        data = await productsModel.paginate(
+          { ...queryParam },
+          { page: page, limit: limit }
+        );
       } else {
-        data = await productsModel.find({});
+        data = await productsModel.paginate(
+          { ...queryParam },
+          { page: page, limit: limit, ...validateSort(sort) }
+        );
       }
+
+      // let data;
+      // const regularPipe = [{ $limit: limit }];
+      // const sortObject = validateSort(sort);
+
+      // if (sortObject == null) {
+      //   data = await productsModel.aggregate([
+      //     validateQuery(query),
+      //     ...regularPipe,
+      //   ]);
+      // } else {
+      //   data = await productsModel.aggregate([
+      //     validateQuery(query),
+      //     ...regularPipe,
+      //     sortObject,
+      //   ]);
+      // }
+
+      data;
 
       return data;
     } catch (error) {
@@ -34,14 +134,14 @@ class ProductManager {
   ) {
     //Se crea el objeto productos
     const product = {
-      title,
-      description,
+      title: title.toLowerCase(),
+      description: description.toLowerCase(),
       price,
       code,
       stock,
       status,
-      category,
-      thumbnail,
+      category: category.toLowerCase(),
+      thumbnail: thumbnail.toLowerCase(),
     };
 
     //Se agrega el producto a la DB

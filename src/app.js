@@ -1,6 +1,8 @@
 //Importar librería
 const express = require("express");
 
+const productsModel = require("../dao/classes/productManager");
+
 //Import
 const path = require("path");
 const mongoose = require("mongoose");
@@ -109,11 +111,13 @@ socketServer.on("connection", (socket) => {
 
 mongoose.connect(
   `mongodb+srv://${userMongo}:${passwordMongo}@ecommerce.ff5ghqj.mongodb.net/${dbMongo}?retryWrites=true&w=majority`,
-  (error) => {
+  async (error) => {
     if (error) {
       console.log("Cannot connect to database: ", error);
       process.exit();
     } else {
+      // const data = await productManager.getProducts("Mujer", "asc", 3);
+      // console.log(data);
       console.log("Connected to the database");
     }
   }
