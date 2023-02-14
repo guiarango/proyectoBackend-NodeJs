@@ -11,10 +11,20 @@ router.use(middlewareCarts);
 //Importar controlador de cart
 const cartController = require("../controllers/cartController");
 
-router.post("", cartController.createCart);
+router.get("", cartController.listCarts);
 
 router.get("/:cid", cartController.getCartById);
 
+router.post("", cartController.createCart);
+
 router.post("/:cid/product/:pid", cartController.addProductToCart);
+
+router.put("/:cid", cartController.updateAllProducts);
+
+router.put("/:cid/product/:pid", cartController.updateProductQuantity);
+
+router.delete("/:cid", cartController.deleteCart);
+
+router.delete("/:cid/product/:pid", cartController.deleteProductFromCart);
 
 module.exports = router;

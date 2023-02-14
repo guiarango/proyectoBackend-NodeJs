@@ -6,7 +6,7 @@ const productController = {
     //Se guarda el query string de limit,page,query y sort
     const limit = Number(req.query.limit);
     const page = Number(req.query.page);
-    const query = req.query.categoria.toLowerCase() || req.query.stock;
+    const query = req.query.categoria?.toLowerCase() || req.query.stock;
     const sort = req.query.sort;
 
     //Se evaluan los valores que se pasaran por parametro para retornar los productos
@@ -14,14 +14,15 @@ const productController = {
     const pag = (page && !isNaN(page) && page) || 1;
     const que = !query ? null : query;
     const sor =
-      ((sort.toLowerCase() === "asc" || sort.toLowerCase() === "desc") &&
+      ((sort?.toLowerCase() === "asc" || sort?.toLowerCase() === "desc") &&
         sort) ||
       null;
 
     //Se consultan los productos
     const products = await productManager.getProducts(que, sor, lim, pag);
 
-    return res.status(200).send({ result: "sucess", payload: products });
+    return res.render("products", { products: products.docs });
+    // return res.status(200).send({ status: "sucess", payload: products });
   },
   createProduct: async (req, res) => {
     const {

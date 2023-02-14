@@ -46,10 +46,10 @@ function requiredParameter(parameterName) {
 
 function validateSort(sort) {
   if (sort === "asc") {
-    return { sort: { date: 1 } };
+    return { sort: { price: 1 } };
   }
   if (sort === "desc") {
-    return { sort: { date: -1 } };
+    return { sort: { price: -1 } };
   }
   return null;
 }
@@ -96,6 +96,19 @@ class ProductManager {
           { page: page, limit: limit, ...validateSort(sort) }
         );
       }
+
+      data.prevLink =
+        data.hasPrevPage == false
+          ? null
+          : `http://localhost:8080/api/products/?sort=asc&categoria=Mujer&limit=1&page=${
+              page - 1
+            }`;
+      data.nextLink =
+        data.hasNextPage == false
+          ? null
+          : `http://localhost:8080/api/products/?sort=asc&categoria=Mujer&limit=1&page=${
+              page + 1
+            }`;
 
       // let data;
       // const regularPipe = [{ $limit: limit }];

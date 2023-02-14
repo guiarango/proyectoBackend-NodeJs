@@ -6,7 +6,15 @@ const messageCollection = "messages";
 const productCollection = "products";
 
 const cartSchema = new mongoose.Schema({
-  products: Array,
+  products: {
+    type: [
+      {
+        quantity: Number,
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+      },
+    ],
+    default: [],
+  },
 });
 
 const messageSchema = new mongoose.Schema({
@@ -24,6 +32,10 @@ const productSchema = new mongoose.Schema({
   category: String,
   thumbnail: String,
 });
+
+// cartSchema.pre("find", function () {
+//   this.populate("products");
+// });
 
 productSchema.plugin(mongoosePaginate);
 

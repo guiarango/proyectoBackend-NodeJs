@@ -2,6 +2,15 @@
 const { cartManager } = require("../dao/classes/cartManager");
 
 const cartController = {
+  listCarts: async function (req, res) {
+    try {
+      const carrito = await cartManager.getCarts();
+      return res.status(200).send(carrito);
+    } catch (error) {
+      return res.status(404).send(error.message);
+    }
+  },
+
   createCart: async (req, res) => {
     const jsonProductos = req.body;
 
@@ -23,7 +32,8 @@ const cartController = {
     //Se valida que el resultado de carrito exista
     try {
       const carrito = await cartManager.getProductsByCartId(cid);
-      return res.status(200).send(carrito);
+      console.log(carrito);
+      return res.render("cartDetail", { carrito: carrito.products });
     } catch (error) {
       return res.status(404).send(error.message);
     }
@@ -44,6 +54,61 @@ const cartController = {
         quantity
       );
       return res.status(200).send(newProductsOnCart);
+    } catch (error) {
+      res.status(404).send(error.message);
+    }
+  },
+
+  updateAllProducts: async (req, res) => {
+    const cid = req.params.cid;
+    const products = req.body.products;
+
+    try {
+      const updatedProducts = await cartManager.updateAllProductsOnCart(
+        cid,
+        products
+      );
+      return res.status(200).send(updatedProducts);
+    } catch (error) {
+      res.status(404).send(error.message);
+    }
+  },
+
+  updateProductQuantity: async (req, res) => {
+    const quantity = req.body.quantity;
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+
+    try {
+      const updatedProduct = await cartManager.updateProductQuantityOnCart(
+        cid,
+        pid,
+        quantity
+      );
+      return res.status(200).send(updatedProduct);
+    } catch (error) {
+      res.status(404).send(error.message);
+    }
+  },
+
+  deleteCart: async (req, res) => {
+    const cid = req.params.cid;
+
+    try {
+      const deletedCart = await cartManager.deleteCart(cid);
+      return res.status(200).send(deletedCart);
+    } catch (error) {
+      res.status(404).send(error.message);
+    }
+  },
+
+  deleteProductFromCart: async (req, res) => {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+
+    try {
+      const deletedProduct = await cartManager.deleteProductFromCart(cid, pid);
+      return res.status(200).send(deletedProduct);
     } catch (error) {
       res.status(404).send(error.message);
     }
