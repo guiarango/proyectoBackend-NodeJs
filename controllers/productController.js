@@ -8,6 +8,8 @@ const productController = {
     const page = Number(req.query.page);
     const query = req.query.categoria?.toLowerCase() || req.query.stock;
     const sort = req.query.sort;
+    const user = req.session.user;
+    const userLoggedIn = req.session.userLoggedIn;
 
     //Se evaluan los valores que se pasaran por parametro para retornar los productos
     const lim = (limit && !isNaN(limit) && limit) || 10;
@@ -21,7 +23,13 @@ const productController = {
     //Se consultan los productos
     const products = await productManager.getProducts(que, sor, lim, pag);
 
-    return res.render("products", { products: products.docs });
+    return res.render("products", {
+      products: products.docs,
+      userLoggedIn: userLoggedIn,
+      welcome: user
+        ? `Bienvenid@ ${user.firstName} ${user.lastName} - ${user.role}`
+        : "Bienvenid@ Anonimo",
+    });
     // return res.status(200).send({ status: "sucess", payload: products });
   },
   createProduct: async (req, res) => {

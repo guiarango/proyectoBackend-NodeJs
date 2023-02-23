@@ -1,0 +1,27 @@
+<div style="color:red">{{errors}}</div>
+
+<h1>Log in</h1>
+
+<form method="POST" action="/api/login">
+  <p>
+    <label for="email">Email</label>
+    <input
+      type="email"
+      name="email"
+      id="email"
+      placeholder="Email"
+      value="{{email}}"
+    />
+  </p>
+  <p>
+    <label for="password">Password</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Password"
+    />
+  </p>
+
+  <button type="submit">Login</button>
+</form>

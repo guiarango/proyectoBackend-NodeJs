@@ -1,11 +1,10 @@
 //Importar librería
 const express = require("express");
 
-const productsModel = require("../dao/classes/productManager");
-
 //Import
 const path = require("path");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
 //Variables de entorno
 require("dotenv").config({ path: "./.env" });
@@ -29,6 +28,8 @@ const { Server } = require("socket.io");
 const homeRoutes = require("../routes/home");
 const productRoutes = require("../routes/products");
 const cartRoutes = require("../routes/carts");
+const loginRoutes = require("../routes/login");
+const signUpRoutes = require("../routes/signUp");
 const realTimeProducts = require("../routes/realTimeProducts");
 const realTimeChat = require("../routes/realTimeChat");
 
@@ -43,6 +44,16 @@ const {
   middlewareApp,
   errorHandler,
 } = require("../middlewares/customMiddleware");
+
+//Crear session
+app.use(
+  session({
+    secret: "Secreto",
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+    resave: false,
+  })
+);
 
 //Importar controllers
 const chatController = require("../controllers/chatController");
@@ -116,8 +127,6 @@ mongoose.connect(
       console.log("Cannot connect to database: ", error);
       process.exit();
     } else {
-      // const data = await productManager.getProducts("Mujer", "asc", 3);
-      // console.log(data);
       console.log("Connected to the database");
     }
   }
@@ -128,3 +137,5 @@ app.use("/api/products", productRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/realTimeProducts", realTimeProducts);
 app.use("/api/realTimeChat", realTimeChat);
+app.use("/api/login", loginRoutes);
+app.use("/api/signUp", signUpRoutes);

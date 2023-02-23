@@ -1,4 +1,11 @@
-<h1>Lista de productos</h1>
+{{#if userLoggedIn}}
+  <form method="POST" action="/api/login/logout"><button
+      style="background-color: red;"
+    >Log Out</button></form>
+{{/if}}
+
+<h1>{{welcome}}</h1>
+<h2>Lista de productos</h2>
 
 <h1>Carrito:</h1>
 

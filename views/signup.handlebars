@@ -1,0 +1,57 @@
+<div style="color:red">{{errors}}</div>
+
+<h1>Sign up</h1>
+
+<form method="POST" action="/api/signUp">
+  <p>
+    <label for="firstName">First Name</label>
+    <input
+      type="text"
+      name="firstName"
+      id="firstName"
+      placeholder="First Name"
+      value="{{firstName}}"
+    />
+  </p>
+  <p>
+    <label for="lastName">Last Name</label>
+    <input
+      type="text"
+      name="lastName"
+      id="lastName"
+      placeholder="Last Name"
+      value="{{lastName}}"
+    />
+  </p>
+  <p>
+    <label for="email">Email</label>
+    <input
+      type="email"
+      name="email"
+      id="email"
+      placeholder="Email"
+      value="{{email}}"
+    />
+  </p>
+  <p>
+    <label for="age">Age</label>
+    <input
+      type="number"
+      name="age"
+      id="age"
+      placeholder="Age"
+      value="{{age}}"
+    />
+  </p>
+  <p>
+    <label for="password">Password</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Password"
+    />
+  </p>
+
+  <button type="submit">Sign up</button>
+</form>
