@@ -6,7 +6,7 @@ class UserManager {
   async getUser(email, password) {
     try {
       const userFound = await userModel.findOne({
-        $and: [{ email: email }, { password: password }],
+        email: email,
       });
       return userFound;
     } catch (error) {
@@ -20,7 +20,8 @@ class UserManager {
 
     //Se agrega el carrito a la DB
     try {
-      const newUser = await userModel.create(userInfo);
+      let newUser = await userModel.create(userInfo);
+      delete newUser._doc.password;
       return newUser;
     } catch (error) {
       return undefined;

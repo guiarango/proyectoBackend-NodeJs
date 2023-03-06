@@ -1,13 +1,15 @@
 //Importar clase de productos
 const { userManager } = require("../dao/classes/userManager");
+const bcrypt = require("bcrypt");
 
-const loginController = {
+const signUpController = {
   showForm: async function (req, res) {
     return res.render("signUp", {});
   },
 
   signUp: async function (req, res) {
-    const { firstName, lastName, email, age, password, role } = req.body;
+    let { firstName, lastName, email, age, password, role } = req.body;
+    password = bcrypt.hashSync(password, 10);
 
     //Validar que los campos no esten vacios
     if (
@@ -36,10 +38,10 @@ const loginController = {
       }
 
       return res.render("signUp", {
-        errors: "Error al crear el usuario, intente nuevamente",
+        errors: "El email ya se encuentra registrado en la aplicacion",
         firstName: firstName,
         lastName: lastName,
-        email: email,
+        // email: email,
         age: age,
         password,
       });
@@ -54,4 +56,4 @@ const loginController = {
     });
   },
 };
-module.exports = loginController;
+module.exports = signUpController;

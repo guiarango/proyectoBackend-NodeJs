@@ -5,6 +5,8 @@ const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const passport = require("passport");
+const initializePassport = require("./config/passport.config");
 
 //Variables de entorno
 require("dotenv").config({ path: "./.env" });
@@ -54,6 +56,10 @@ app.use(
     resave: false,
   })
 );
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Importar controllers
 const chatController = require("../controllers/chatController");
