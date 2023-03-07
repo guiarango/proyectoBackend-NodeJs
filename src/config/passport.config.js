@@ -1,5 +1,6 @@
 const passport = require("passport");
 const local = require("passport-local");
+const GitHubStrategy = require("passport-github2");
 const { userModel } = require("../../dao/models/ecommerceModels");
 const bcrypt = require("bcrypt");
 
@@ -29,7 +30,7 @@ const initializePassport = () => {
             role,
             password: bcrypt.hashSync(password, 10),
           };
-          let result = userModel.create(newUser);
+          let result = await userModel.create(newUser);
           return done(null, result);
         } catch (error) {
           return done("error al obtener el usuario " + error);
@@ -61,6 +62,42 @@ const initializePassport = () => {
           return done(null, user);
         } catch (error) {
           return done(error);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "github",
+    new GitHubStrategy(
+      {
+        clientID: "Iv1.10fc84a9db543be7",
+        clientSecret: "aa340092da41fda2065295bd09a109bbfaa911c0",
+        callbackURL: "http://localhost:8080/api/login/githubcallback",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        try {
+          console.log(profile);
+          let user = await userModel.findOne({ email: profile._json.email });
+
+          if (!user) {
+            let newUser = {
+              firstName: profile._json.name,
+              lastName: "",
+              age: 18,
+              email: profile._json.email,
+              role: "usuario",
+              password: "",
+            };
+
+            let result = await userModel.create(newUser);
+
+            done(null, result);
+          } else {
+            done(null, user);
+          }
+        } catch (error) {
+          done(error);
         }
       }
     )
