@@ -35,7 +35,6 @@ const loginController = {
       });
     }
 
-    console.log(email);
     return res.render("login", {
       errors: "Favor diligenciar todos los campos del Login",
       email: email,

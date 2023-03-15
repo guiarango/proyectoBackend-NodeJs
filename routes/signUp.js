@@ -13,7 +13,19 @@ router.post(
   "/",
   passport.authenticate("register", { failureRedirect: "/failregister" }),
   async (req, res) => {
-    res.send({ status: "success", message: "User registered" });
+    const user = {
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+    };
+
+    req.session.user = user;
+    req.session.userLoggedIn = true;
+
+    return res.redirect("/api/products");
+    // res.send({ status: "success", message: "User registered" });
   }
 );
 

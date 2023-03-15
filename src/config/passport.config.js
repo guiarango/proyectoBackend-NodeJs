@@ -59,7 +59,7 @@ const initializePassport = () => {
           }
 
           delete user._doc.password;
-          return done(null, user);
+          return done(null, user._doc);
         } catch (error) {
           return done(error);
         }
@@ -77,7 +77,7 @@ const initializePassport = () => {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          console.log(profile);
+          // console.log(profile);
           let user = await userModel.findOne({ email: profile._json.email });
 
           if (!user) {

@@ -21,12 +21,16 @@ router.post(
     }
 
     req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
       age: req.user.age,
       email: req.user.email,
+      role: req.user.role,
     };
-    res.send({ status: "success", payload: req.user });
+    req.session.userLoggedIn = true;
+
+    res.redirect("products");
+    // res.send({ status: "success", payload: req.user });
   }
 );
 
@@ -44,9 +48,14 @@ router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
-    console.log("Llegue al callback");
+    req.session.user = {
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      age: req.user.age,
+      email: req.user.email,
+      role: req.user.role,
+    };
 
-    req.session.user = req.user;
     req.session.userLoggedIn = true;
 
     res.redirect("/api/products");
