@@ -5,9 +5,11 @@ class UserManager {
 
   async getUser(email, password) {
     try {
-      const userFound = await userModel.findOne({
-        email: email,
-      });
+      const userFound = await userModel
+        .findOne({
+          email: email,
+        })
+        .populate("carts._id");
       return userFound;
     } catch (error) {
       return undefined;

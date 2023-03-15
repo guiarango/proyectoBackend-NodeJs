@@ -12,7 +12,7 @@ const initializePassport = () => {
     new LocalStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
-        let { firstName, lastName, email, age, role } = req.body;
+        let { firstName, lastName, email, age, role, cartId } = req.body;
 
         try {
           let user = await userModel.findOne({ email: username });
@@ -28,6 +28,7 @@ const initializePassport = () => {
             email,
             age,
             role,
+            cartId,
             password: bcrypt.hashSync(password, 10),
           };
           let result = await userModel.create(newUser);
@@ -88,6 +89,7 @@ const initializePassport = () => {
               email: profile._json.email,
               role: "usuario",
               password: "",
+              cartId: "",
             };
 
             let result = await userModel.create(newUser);

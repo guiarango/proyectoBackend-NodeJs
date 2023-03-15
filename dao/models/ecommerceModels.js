@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   age: Number,
   password: String,
+  cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
   role: String,
 });
 

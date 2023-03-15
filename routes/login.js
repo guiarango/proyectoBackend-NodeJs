@@ -26,6 +26,7 @@ router.post(
       age: req.user.age,
       email: req.user.email,
       role: req.user.role,
+      cartId: req.user.cartId,
     };
     req.session.userLoggedIn = true;
 
